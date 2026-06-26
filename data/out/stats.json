@@ -1,0 +1,41 @@
+{
+  "total_images": 51394,
+  "counts_by_split": {
+    "fake": 25697,
+    "real": 25697
+  },
+  "targets": {
+    "fake_images": 25697,
+    "real_images": 25697
+  },
+  "method_coverage": 7,
+  "min_methods_target": 13,
+  "methods": {
+    "Celeb-DF": 19434,
+    "DF-TIMIT-HQ": 254,
+    "DF-TIMIT-LQ": 39,
+    "FF++-DF": 288,
+    "FF++-FS": 290,
+    "FF++-FShifter": 5374,
+    "UADFV": 18
+  },
+  "by_source": {
+    "Celeb-DF": 26002,
+    "DF-TIMIT": 293,
+    "FF++": 13314,
+    "UADFV": 295,
+    "ForgeryNet": 11490
+  },
+  "by_manip_type": {
+    "AEGAN": 39904,
+    "Graphic": 11490
+  },
+  "table2_style": {
+    "image": {
+      "AEGAN": 25697
+    },
+    "video": {
+      "AEGAN": 5902
+    }
+  }
+}

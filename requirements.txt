@@ -1,0 +1,33 @@
+# ID Test Set reconstruction pipeline — Python dependencies
+# Tested with Python 3.10–3.12. See SETUP.md for full environment notes.
+
+# --- core ---
+numpy>=1.23
+opencv-python>=4.7
+Pillow>=9.5
+pandas>=1.5
+pyyaml>=6.0
+tqdm>=4.65
+imageio>=2.27            # frame I/O fallback when ffmpeg is unavailable
+
+# --- evaluation (AUC / accuracy / EER via scikit-learn) ---
+scikit-learn>=1.0
+
+# --- face alignment (Dlib + OpenCV, as in the paper) ---
+dlib>=19.24
+# dlib needs: cmake, and the 68-landmark model file shape_predictor_68_face_landmarks.dat
+#   (download: http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2)
+
+# --- deep learning (detector suite + FSGAN/MegaFS generation) ---
+torch>=2.0
+torchvision>=0.15        # optional: only the Patch-resnet variant imports it (guarded)
+
+# --- dataset / detector-weight downloads (scripts/download_*.sh) ---
+gdown>=4.0               # Google Drive (Face X-ray, Patch-Forensics, multi-attention)
+kaggle>=1.5              # Kaggle mirrors (Celeb-DF, FF++, UADFV); needs ~/.kaggle/kaggle.json
+
+# --- optional: faithful Phase-2 human annotation UI ---
+flask>=2.3
+
+# --- testing ---
+pytest>=7.3

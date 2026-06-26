@@ -1,0 +1,90 @@
+# ============================================================================
+# ID Test Set reconstruction — main configuration
+# Reference: "Towards Benchmarking and Evaluating Deepfake Detection" (arXiv:2203.02115)
+# Override paths to point at your machine. All relative paths are resolved
+# against the project root (id_test_reconstruction/).
+# ============================================================================
+
+seed: 2022                     # global seed -> deterministic RNG everywhere
+device: cuda                   # or 'cpu'
+
+# --- top-level data roots ---
+paths:
+  raw:     data/raw            # the 7 source datasets live here (see config/datasets.yaml)
+  work:    data/work           # caches: extracted frames, aligned faces, detector scores
+  out:     data/out            # final assembled ID test set + perturbations
+  external: external           # third-party repos (FSGAN, MegaFS) + their pretrained weights
+
+# --- stage 1: frame extraction (ffmpeg) ---
+preprocess:
+  fps: 1.0                     # sample ~1 frame/sec; set to null to use 'stride'
+  stride: null                 # if fps is null, keep every Nth frame
+  max_frames_per_video: 8      # cap per video so huge datasets stay tractable
+
+# --- stage 1b: face crop + alignment (Dlib + OpenCV) ---
+face:
+  size: 256                    # output aligned face edge length (px)
+  detector: frontal            # 'frontal' (HOG, no extra weights) or 'cnn' (needs mmod_human_face_detector.dat)
+  landmark_model: shape_predictor_68_face_landmarks.dat
+  min_face_size: 80            # skip detections smaller than this (px)
+
+# --- stage 2: Phase-1 detection-model selection (false acceptance) ---
+# A FAKE is 'hard' if the detector classifies it as REAL with high confidence.
+phase1:
+  detectors: [xception]        # real DeepfakeBench Xception checkpoint (external/weights/xception)
+  tau: 0.3                     # false-acceptance threshold (0.3 -> top ~40% most-realistic fakes)
+  ensemble: all                # 'all' (AND: every detector must accept) | 'any' | 'mean'
+
+# --- stage 3: Phase-2 user-perception selection ---
+# Paper: blind study, keep fakes judged real by >= 15 of 30 participants.
+phase2:
+  mode: proxy                  # 'proxy' (automated, APPROXIMATION) or 'manual' (annotation_ui)
+  proxy_model: xception        # realism proxy used when mode == proxy
+  human_threshold: 15          # paper value
+  num_participants: 30         # paper value
+
+# --- stage 4: private (but reproducible) generated fakes ---
+generation:
+  fsgan:
+    enabled: false             # set true once FSGAN repo + weights are set up (see generation/README.md)
+    target_videos: 40          # paper: 40 FSGAN videos
+  megafs:
+    enabled: false             # set true once MegaFS repo + weights are set up
+    target_images: 2937        # paper: 2937 MegaFS images
+
+# --- stage 5: balance & coverage targets (paper Table 2) ---
+balance:
+  target_fake_images: 25697
+  target_real_images: 25697
+  min_methods: 13              # enforce >= 13 distinct manipulation methods
+
+# --- stage 6: self-train a detector from scratch (proof-of-concept) ---
+# Trains FWA on aligned reals (excluding ID-test uids) with on-the-fly synthetic
+# warping-artifact fakes. See scripts/10_train_fwa.py. Small data -> weak model.
+training:
+  epochs: 15
+  batch_size: 32
+  lr: 0.0001
+  # init_from: imagenet   # planned; Cadene mirror down -> falls back to xception_best
+
+# --- stage 7: the 5 perturbations, randomized intensity in rational ranges ---
+perturbations:
+  enabled: true
+  variants_per_image: 1        # perturbed copies to emit per kept image
+  types:
+    color_contrast:      {low: 0.7, high: 1.3}   # contrast factor
+    color_saturation:    {low: 0.4, high: 1.6}   # saturation factor
+    gaussian_blur:       {low: 0.1, high: 2.0}   # Gaussian sigma (px)
+    jpeg_compression:    {low: 20,  high: 70}    # JPEG quality (lower = harsher)
+    white_gaussian_noise: {low: 0.0, high: 0.05}  # noise std, relative to [0,1]
+
+# --- stage 7: evaluate assembled detectors over the ID test set ---
+# Runs each detector over the clean images + every perturbation type, caches
+# per-sample P(real) to data/out/eval/scores_<name>.csv, and writes
+# results.csv + report.md (AUC / Accuracy / EER). See scripts/08_evaluate.py.
+evaluation:
+  detectors: [xception, meso4, meso4inception, ffd, facexray, patch, fwa_trained]
+  batch_size: 32
+  conditions: [clean, color_contrast, color_saturation, gaussian_blur, jpeg_compression, white_gaussian_noise]
+  per_method: true            # also report AUC per manipulation method (fakes of method vs all reals)
+  out_subdir: eval            # scores/results live under paths.out / this name

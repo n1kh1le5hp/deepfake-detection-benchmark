@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tally</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #111; color: #eee; margin: 24px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #333; padding: 6px 10px; text-align: left; }
+    th { background: #222; }
+  </style>
+</head>
+<body>
+  <h2>Tally — {{ n_judgements }} judgements so far</h2>
+  <p><a href="/export">Export votes.json</a></p>
+  <table>
+    <tr><th>uid</th><th>real-votes</th></tr>
+    {% for uid, n in tally.items() %}
+    <tr><td>{{ uid }}</td><td>{{ n }}</td></tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

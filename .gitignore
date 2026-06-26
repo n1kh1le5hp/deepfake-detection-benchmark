@@ -1,0 +1,25 @@
+# --- Datasets & model weights: too large for git (regenerable / re-downloadable) ---
+data/raw/
+data/work/
+data/out/images/
+data/out/perturbed/
+external/weights/
+external/models/
+
+# --- Large per-sample score dumps (regenerable via scripts/08_evaluate.py) ---
+data/out/eval/**/scores_*.csv
+data/out/eval/smoke/
+
+# --- Python ---
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# --- Logs / runtime artifacts ---
+*.log
+
+# --- OS / editor cruft ---
+.DS_Store
+.idea/
+.vscode/

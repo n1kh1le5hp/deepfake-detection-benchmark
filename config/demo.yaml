@@ -1,0 +1,55 @@
+# ============================================================================
+# DEMO config — drives a synthetic proof-of-concept run of the pipeline.
+# Same schema as default.yaml, but with small targets so it runs in seconds.
+# NOT the real ID test set. Use: load_config("config/demo.yaml") or pass to
+# scripts via the CONFIG env var / --config (see scripts/_common.py).
+# ============================================================================
+seed: 2024
+device: cpu                      # demo has no torch; CPU is fine for ConstantDetector
+
+paths:
+  raw: data/raw
+  work: data/work
+  out: data/out
+  external: external
+
+preprocess:
+  fps: 1.0
+  stride: null
+  max_frames_per_video: 8
+
+face:
+  size: 64                       # match synthetic image size
+  detector: frontal
+  landmark_model: shape_predictor_68_face_landmarks.dat
+  min_face_size: 30
+
+phase1:
+  detectors: [default]           # ConstantDetector (plumbing only)
+  tau: 0.5
+  ensemble: all
+
+phase2:
+  mode: proxy
+  proxy_model: default
+  human_threshold: 15
+  num_participants: 30
+
+generation:
+  fsgan:  {enabled: false, target_videos: 40}
+  megafs: {enabled: false, target_images: 2937}
+
+balance:
+  target_fake_images: 60         # small for the demo (real target: 25697)
+  target_real_images: 60
+  min_methods: 10
+
+perturbations:
+  enabled: true
+  variants_per_image: 1
+  types:
+    color_contrast:       {low: 0.7, high: 1.3}
+    color_saturation:     {low: 0.4, high: 1.6}
+    gaussian_blur:        {low: 0.1, high: 2.0}
+    jpeg_compression:     {low: 20, high: 70}
+    white_gaussian_noise: {low: 0.0, high: 0.05}
