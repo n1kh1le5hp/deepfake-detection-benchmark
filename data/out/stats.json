@@ -1,8 +1,8 @@
 {
-  "total_images": 51394,
+  "total_images": 41662,
   "counts_by_split": {
     "fake": 25697,
-    "real": 25697
+    "real": 15965
   },
   "targets": {
     "fake_images": 25697,
@@ -11,31 +11,31 @@
   "method_coverage": 7,
   "min_methods_target": 13,
   "methods": {
-    "Celeb-DF": 19434,
-    "DF-TIMIT-HQ": 254,
-    "DF-TIMIT-LQ": 39,
-    "FF++-DF": 288,
-    "FF++-FS": 290,
-    "FF++-FShifter": 5374,
-    "UADFV": 18
+    "Celeb-DF": 19396,
+    "DF-TIMIT-HQ": 250,
+    "DF-TIMIT-LQ": 38,
+    "FF++-DF": 285,
+    "FF++-FS": 286,
+    "FF++-FShifter": 5321,
+    "UADFV": 121
   },
   "by_source": {
-    "Celeb-DF": 26002,
-    "DF-TIMIT": 293,
-    "FF++": 13314,
-    "UADFV": 295,
-    "ForgeryNet": 11490
+    "Celeb-DF": 26206,
+    "DF-TIMIT": 288,
+    "FF++": 13506,
+    "UADFV": 121,
+    "ForgeryNet": 1541
   },
   "by_manip_type": {
-    "AEGAN": 39904,
-    "Graphic": 11490
+    "AEGAN": 40121,
+    "Graphic": 1541
   },
   "table2_style": {
     "image": {
       "AEGAN": 25697
     },
     "video": {
-      "AEGAN": 5902
+      "AEGAN": 5931
     }
   }
 }
