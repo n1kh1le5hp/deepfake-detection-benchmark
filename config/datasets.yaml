@@ -1,52 +1,32 @@
-# ============================================================================
-# Source dataset layout descriptors
-# One entry per public dataset used to build the ID test set.
-# Paths are relative to paths.raw (see config/default.yaml) unless absolute.
-# `manip_type` normalizes each source into the paper's coarse taxonomy
-#   (AEGAN | Graphic | Unknown) for the Table-2-style distribution report.
-# Enable only the datasets you have actually obtained; disabled ones are skipped.
-# Detailed parsing of each dataset's internal structure lives in
-# idtest/datasets/readers.py.
-# ============================================================================
-
 UADFV:
-  enabled: true            # REAL from Kaggle mirror (49 real + 49 fake)
-  root: UADFV
+  enabled: true
+  root: /home/asthanajee/Desktop/EE656/deepfake-detection-benchmark/datasets/UADFV/UADFV/UADFV
   manip_type: AEGAN
-
 DF-TIMIT:
-  enabled: true            # REAL from Zenodo (640 fake videos: 320 HQ + 320 LQ; reals are in VidTIMIT, separate)
-  root: DF-TIMIT
+  enabled: true
+  root: /home/asthanajee/Desktop/EE656/deepfake-detection-benchmark/datasets/DF-TIMIT/DF-TIMIT/DeepfakeTIMIT
   manip_type: AEGAN
-
 Celeb-DF:
-  enabled: true            # REAL v2 from Kaggle mirror (590 real + 5,639 fake + 300 YT-real)
-  root: Celeb-DF
+  enabled: true
+  root: /home/asthanajee/Desktop/EE656/deepfake-detection-benchmark/datasets/Celeb-DF
   manip_type: AEGAN
-
-DF-1.0:                 # DeeperForensics-1.0
+DF-1.0:
   enabled: false
   root: DeeperForensics-1.0
   manip_type: AEGAN
-
-FF++:                   # FaceForensics++ : three manipulation methods tracked separately
-  enabled: true            # REAL C23 from Kaggle mirror (original reals + Deepfakes/FaceSwap/FaceShifter fakes)
-  root: FaceForensics++
+FF++:
+  enabled: true
+  root: /home/asthanajee/Desktop/EE656/deepfake-detection-benchmark/datasets/FaceForensics++/FaceForensics++_C23
   manip_type: AEGAN
-  methods: [DF, FS, FShifter]   # Deepfakes, Face2Face, FaceShifter
-
-DFDC:                   # Deepfake Detection Challenge
+  methods: [DF, FS, FShifter]
+DFDC:
   enabled: false
   root: DFDC
   manip_type: AEGAN
-
 ForgeryNet:
-  enabled: true            # REAL public test set downloaded (8,985 real + 24 fake)
-  root: ForgeryNet
+  enabled: true
+  root: /home/asthanajee/Desktop/EE656/deepfake-detection-benchmark/datasets/ForgeryNet/ForgeryNet/imgs
   manip_type: Graphic
-
-# Identity source used by the FSGAN/MegaFS generation stage (reproduces the
-# paper's "hosted private dataset" inputs: CelebA images + FF++ raw videos).
 CelebA:
   enabled: false
   root: CelebA

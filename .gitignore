@@ -23,3 +23,11 @@ __pycache__/
 .DS_Store
 .idea/
 .vscode/
+venv/
+datasets/
+external/DeepfakeBench/
+external/shape_predictor_68_face_landmarks.dat
+data/work/
+outputs/best_model.pth
+*.zip
+*.pth
